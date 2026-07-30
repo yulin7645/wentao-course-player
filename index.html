@@ -7,52 +7,101 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src https://xiaoe-player-live-replay-bnhcnqojqg.cn-hangzhou.fcapp.run; media-src 'self' https: blob:; img-src data:; base-uri 'none'; form-action 'none'">
   <title>课程云端播放器</title>
   <style>
-    :root{--bg:#08100f;--fg:#eef8f2;--muted:#9aaca4;--accent:#b8f05c;--card:rgba(17,30,27,.92);--line:rgba(184,240,92,.18)}
+    :root{--bg:#08100f;--fg:#eef8f2;--muted:#9aaca4;--accent:#b8f05c;--card:rgba(17,30,27,.94);--panel:#0b1513;--line:rgba(184,240,92,.18);--soft-line:rgba(255,255,255,.08)}
     *{box-sizing:border-box}html,body{min-height:100%;margin:0}body{background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}
-    main{min-height:100vh;display:grid;place-items:center;padding:40px 20px;background:radial-gradient(circle at 15% 10%,rgba(184,240,92,.16),transparent 30%),radial-gradient(circle at 90% 85%,rgba(56,185,146,.14),transparent 35%),linear-gradient(145deg,#07100e,#0b1714 55%,#08100f)}
-    article{width:min(1040px,100%);padding:28px;border:1px solid var(--line);border-radius:28px;background:var(--card);box-shadow:0 30px 90px rgba(0,0,0,.38)}
-    header{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:24px}.eyebrow{margin:0 0 8px;color:var(--accent);font:12px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.16em}
-    h1{margin:0;font-size:clamp(24px,4vw,40px);line-height:1.15;letter-spacing:-.035em}.badge{flex:none;padding:8px 12px;border:1px solid var(--line);border-radius:999px;color:var(--accent);font-size:13px}
-    .frame{overflow:hidden;position:relative;display:grid;place-items:center;width:100%;aspect-ratio:var(--video-ratio,16/9);margin-inline:auto;border:1px solid rgba(255,255,255,.08);border-radius:20px;background:#030706;transition:width .2s ease,aspect-ratio .2s ease}.frame.is-portrait{width:auto;height:min(68vh,820px);max-width:100%;aspect-ratio:var(--video-ratio,9/16)}video{display:none;width:100%;height:100%;object-fit:contain;background:#000}.status{display:grid;justify-items:center;gap:16px;padding:30px;color:var(--muted);text-align:center}.status p{margin:0}.pulse{width:42px;height:42px;border:2px solid rgba(184,240,92,.22);border-top-color:var(--accent);border-radius:50%;animation:spin .9s linear infinite}
-    footer{display:grid;grid-template-columns:auto auto 1fr;align-items:center;gap:28px;padding-top:20px;color:var(--muted);font-size:13px}footer div{display:grid;gap:4px}footer strong{color:var(--fg);font:500 13px ui-monospace,SFMono-Regular,Menlo,monospace}footer p{justify-self:end;margin:0;text-align:right}small{font-size:11px;letter-spacing:.08em;text-transform:uppercase}
-    @keyframes spin{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){.pulse{animation:none}}@media(max-width:700px){main{align-items:start;padding:18px 12px}article{padding:16px;border-radius:20px}header{margin-bottom:16px}.badge{display:none}.frame{border-radius:14px}footer{grid-template-columns:1fr 1fr;gap:16px}footer p{grid-column:1/-1;justify-self:start;text-align:left}}
+    button,input{font:inherit}button{color:inherit}
+    main{min-height:100vh;display:grid;place-items:center;padding:28px 20px;background:radial-gradient(circle at 15% 10%,rgba(184,240,92,.16),transparent 30%),radial-gradient(circle at 90% 85%,rgba(56,185,146,.14),transparent 35%),linear-gradient(145deg,#07100e,#0b1714 55%,#08100f)}
+    article{width:min(1480px,100%);padding:24px;border:1px solid var(--line);border-radius:28px;background:var(--card);box-shadow:0 30px 90px rgba(0,0,0,.38)}
+    header{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin-bottom:20px}.eyebrow{margin:0 0 8px;color:var(--accent);font:12px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.16em}.app-name{margin:0 0 8px;color:var(--muted);font-size:13px}
+    h1{max-width:1100px;margin:0;font-size:clamp(22px,3vw,34px);line-height:1.25;letter-spacing:-.025em}.badge{flex:none;padding:8px 12px;border:1px solid var(--line);border-radius:999px;color:var(--accent);font-size:13px}
+    .workspace{display:grid;grid-template-columns:minmax(0,1.75fr) minmax(340px,.82fr);align-items:start;gap:20px}.player-column{min-width:0}
+    .frame{overflow:hidden;position:relative;display:grid;place-items:center;width:100%;aspect-ratio:var(--video-ratio,16/9);margin-inline:auto;border:1px solid var(--soft-line);border-radius:20px;background:#030706;transition:width .2s ease,aspect-ratio .2s ease}.frame.is-portrait{width:auto;height:min(66vh,780px);max-width:100%;aspect-ratio:var(--video-ratio,9/16)}video{display:none;width:100%;height:100%;object-fit:contain;background:#000}.status{display:grid;justify-items:center;gap:16px;padding:30px;color:var(--muted);text-align:center}.status p{margin:0}.pulse{width:42px;height:42px;border:2px solid rgba(184,240,92,.22);border-top-color:var(--accent);border-radius:50%;animation:spin .9s linear infinite}
+    .transcript-panel{height:min(66vh,780px);min-height:420px;overflow:hidden;display:grid;grid-template-rows:auto auto minmax(0,1fr);border:1px solid var(--soft-line);border-radius:20px;background:var(--panel)}.transcript-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 18px 12px}.transcript-head h2{margin:0;font-size:18px}.transcript-count{color:var(--muted);font-size:12px}
+    .search-row{position:relative;padding:0 14px 14px}.search-row input{width:100%;height:42px;padding:0 42px 0 38px;border:1px solid var(--soft-line);border-radius:12px;outline:none;background:#07100e;color:var(--fg)}.search-row input:focus{border-color:rgba(184,240,92,.58);box-shadow:0 0 0 3px rgba(184,240,92,.08)}.search-icon{position:absolute;left:27px;top:12px;color:var(--muted);font-size:14px}.clear-search{display:none;position:absolute;right:23px;top:7px;width:28px;height:28px;border:0;border-radius:50%;background:rgba(255,255,255,.07);cursor:pointer}.clear-search.visible{display:block}
+    .transcript-list{overflow:auto;padding:0 8px 12px;scrollbar-color:rgba(184,240,92,.28) transparent}.segment{width:100%;display:grid;grid-template-columns:58px 1fr;gap:10px;padding:11px 10px;border:0;border-radius:12px;background:transparent;text-align:left;cursor:pointer}.segment:hover{background:rgba(255,255,255,.045)}.segment.active{background:rgba(184,240,92,.12);box-shadow:inset 3px 0 0 var(--accent)}.segment-time{padding-top:2px;color:var(--accent);font:12px ui-monospace,SFMono-Regular,Menlo,monospace}.segment-text{color:#dce9e2;font-size:14px;line-height:1.65}.segment mark{padding:0 2px;border-radius:3px;background:#d9ff75;color:#13200c}.transcript-empty{height:100%;display:grid;place-content:center;justify-items:center;gap:10px;padding:30px;color:var(--muted);text-align:center}.transcript-empty strong{color:var(--fg);font-size:14px}.transcript-empty p{max-width:280px;margin:0;font-size:13px;line-height:1.6}
+    footer{display:grid;grid-template-columns:auto auto 1fr;align-items:center;gap:28px;padding-top:16px;color:var(--muted);font-size:13px}footer div{display:grid;gap:4px}footer strong{color:var(--fg);font:500 13px ui-monospace,SFMono-Regular,Menlo,monospace}footer p{justify-self:end;margin:0;text-align:right}small{font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+    @keyframes spin{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){.pulse{animation:none}.frame{transition:none}}@media(max-width:980px){main{align-items:start}.workspace{grid-template-columns:1fr}.transcript-panel{height:min(60vh,620px)}.frame.is-portrait{height:min(66vh,760px)}}@media(max-width:700px){main{padding:12px}article{padding:14px;border-radius:20px}header{margin-bottom:16px}.badge{display:none}.frame,.transcript-panel{border-radius:14px}.transcript-panel{min-height:380px;height:58vh}footer{grid-template-columns:1fr 1fr;gap:16px}footer p{grid-column:1/-1;justify-self:start;text-align:left}.segment{grid-template-columns:52px 1fr}}
   </style>
 </head>
 <body>
   <main>
     <article>
-      <header><div><p class="eyebrow">PRIVATE COURSE ARCHIVE</p><h1>课程云端播放器</h1></div><span class="badge">私有 OSS</span></header>
-      <div class="frame">
-        <video id="video" controls playsinline preload="metadata" aria-label="课程视频播放器"></video>
-        <div class="status" id="status"><span class="pulse" aria-hidden="true"></span><p id="message">正在准备私有播放地址…</p></div>
+      <header>
+        <div>
+          <p class="eyebrow">PRIVATE COURSE ARCHIVE</p>
+          <p class="app-name">课程云端播放器</p>
+          <h1 id="course-title">正在读取课程标题…</h1>
+        </div>
+        <span class="badge">私有 OSS</span>
+      </header>
+      <div class="workspace">
+        <section class="player-column" aria-label="课程视频">
+          <div class="frame">
+            <video id="video" controls playsinline preload="metadata" aria-label="课程视频播放器"></video>
+            <div class="status" id="status"><span class="pulse" aria-hidden="true"></span><p id="message">正在准备私有播放地址…</p></div>
+          </div>
+          <footer>
+            <div><small>资源</small><strong id="resource">等待链接</strong></div>
+            <div><small>大小</small><strong id="size">—</strong></div>
+            <p>播放地址为临时签名；课程文件与逐字稿保存在私有云空间。</p>
+          </footer>
+        </section>
+        <aside class="transcript-panel" aria-label="课程逐字稿">
+          <div class="transcript-head">
+            <h2>逐字稿</h2>
+            <span class="transcript-count" id="transcript-count">准备中</span>
+          </div>
+          <div class="search-row">
+            <span class="search-icon" aria-hidden="true">⌕</span>
+            <input id="transcript-search" type="search" placeholder="搜索逐字稿" autocomplete="off" aria-label="搜索逐字稿">
+            <button class="clear-search" id="clear-search" type="button" aria-label="清空搜索">×</button>
+          </div>
+          <div class="transcript-list" id="transcript-list" aria-live="polite">
+            <div class="transcript-empty"><span class="pulse" aria-hidden="true"></span><strong>正在读取逐字稿</strong><p>完成后可搜索文字，并点击任意片段跳转视频。</p></div>
+          </div>
+        </aside>
       </div>
-      <footer>
-        <div><small>资源</small><strong id="resource">等待链接</strong></div>
-        <div><small>大小</small><strong id="size">—</strong></div>
-        <p>播放地址为临时签名；课程文件保存在私有云空间。</p>
-      </footer>
     </article>
   </main>
   <script>
     const signerBaseUrl="https://xiaoe-player-live-replay-bnhcnqojqg.cn-hangzhou.fcapp.run";
     const params=new URLSearchParams(location.hash.slice(1)||location.search);
-    const rid=params.get("rid")||"",token=params.get("token")||"";
+    const rid=params.get("rid")||"",token=params.get("token")||"",rawTitle=params.get("title")||"";
     const frame=document.querySelector(".frame"),video=document.getElementById("video"),status=document.getElementById("status"),message=document.getElementById("message");
-    const resource=document.getElementById("resource"),size=document.getElementById("size");
+    const resource=document.getElementById("resource"),size=document.getElementById("size"),courseTitle=document.getElementById("course-title");
+    const transcriptList=document.getElementById("transcript-list"),transcriptCount=document.getElementById("transcript-count");
+    const searchInput=document.getElementById("transcript-search"),clearSearch=document.getElementById("clear-search");
     const formatSize=bytes=>{const mb=Number(bytes||0)/1024/1024;return mb>=1024?(mb/1024).toFixed(2)+" GB":mb.toFixed(1)+" MB"};
+    const formatTime=seconds=>{const value=Math.max(0,Math.floor(Number(seconds)||0)),hours=Math.floor(value/3600),minutes=Math.floor(value%3600/60),secs=value%60;return hours?hours+":"+String(minutes).padStart(2,"0")+":"+String(secs).padStart(2,"0"):String(minutes).padStart(2,"0")+":"+String(secs).padStart(2,"0")};
+    const cleanTitle=value=>{let title=String(value||"").trim();title=(title.split(/[\\/]/).pop()||title).replace(/[?#].*$/,"").replace(/\.(mp4|m4v|mov|mkv|avi|webm)$/i,"");if(rid)title=title.replace(new RegExp("^"+rid+"[_.\\s-]*","i"),"");title=title.replace(/_/g," ").replace(/\s+/g," ").trim();return title||"课程视频"};
+    const setTitle=value=>{const title=cleanTitle(value);courseTitle.textContent=title;document.title=title+"｜课程云端播放器"};
+    setTitle(rawTitle);
+    let transcriptSegments=[],activeSegment=-1;
     video.addEventListener("loadedmetadata",()=>{
       const width=video.videoWidth,height=video.videoHeight;if(!width||!height)return;
       frame.style.setProperty("--video-ratio",width+"/"+height);frame.classList.toggle("is-portrait",height>width);
     });
+    const emptyTranscript=(title,detail,loading=false)=>{transcriptList.replaceChildren();const box=document.createElement("div");box.className="transcript-empty";if(loading){const pulse=document.createElement("span");pulse.className="pulse";pulse.setAttribute("aria-hidden","true");box.appendChild(pulse)}const strong=document.createElement("strong");strong.textContent=title;const p=document.createElement("p");p.textContent=detail;box.append(strong,p);transcriptList.appendChild(box)};
+    const appendHighlighted=(container,text,query)=>{if(!query){container.textContent=text;return}const lower=text.toLocaleLowerCase(),needle=query.toLocaleLowerCase();let cursor=0,index=lower.indexOf(needle);while(index!==-1){container.append(document.createTextNode(text.slice(cursor,index)));const mark=document.createElement("mark");mark.textContent=text.slice(index,index+query.length);container.append(mark);cursor=index+query.length;index=lower.indexOf(needle,cursor)}container.append(document.createTextNode(text.slice(cursor)))};
+    const normalizeSegments=data=>{const source=Array.isArray(data?.segments)?data.segments:[];return source.map((segment,index)=>{const start=Number(segment.start??segment.ts??0),next=source[index+1],fallbackEnd=Number(next?.start??next?.ts??data?.duration_seconds??start);return{start:Math.max(0,start),end:Math.max(start,Number(segment.end??fallbackEnd)),text:String(segment.text||"").trim()}}).filter(segment=>segment.text)};
+    const seekToSegment=index=>{const segment=transcriptSegments[index];if(!segment)return;video.currentTime=segment.start+.01;video.play().catch(()=>{});setActiveSegment(index,true)};
+    const renderTranscript=()=>{const query=searchInput.value.trim(),matches=[];transcriptSegments.forEach((segment,index)=>{if(!query||segment.text.toLocaleLowerCase().includes(query.toLocaleLowerCase()))matches.push(index)});transcriptCount.textContent=query?matches.length+" 条匹配":transcriptSegments.length+" 个片段";clearSearch.classList.toggle("visible",Boolean(query));transcriptList.replaceChildren();if(!matches.length){emptyTranscript(query?"没有找到匹配内容":"暂无逐字稿",query?"换一个关键词试试。":"该课程暂时没有可显示的片段。");return}const fragment=document.createDocumentFragment();matches.forEach(index=>{const segment=transcriptSegments[index],button=document.createElement("button"),time=document.createElement("span"),text=document.createElement("span");button.type="button";button.className="segment"+(index===activeSegment?" active":"");button.dataset.segmentIndex=String(index);button.setAttribute("aria-label",formatTime(segment.start)+"，"+segment.text);time.className="segment-time";time.textContent=formatTime(segment.start);text.className="segment-text";appendHighlighted(text,segment.text,query);button.append(time,text);button.addEventListener("click",()=>seekToSegment(index));fragment.appendChild(button)});transcriptList.appendChild(fragment)};
+    const setActiveSegment=(index,scroll)=>{if(index===activeSegment&&!scroll)return;activeSegment=index;transcriptList.querySelectorAll(".segment.active").forEach(item=>item.classList.remove("active"));const current=transcriptList.querySelector('[data-segment-index="'+index+'"]');if(current){current.classList.add("active");if(scroll&&!searchInput.value.trim())current.scrollIntoView({block:"nearest",behavior:"smooth"})}};
+    const findActiveSegment=currentTime=>{let low=0,high=transcriptSegments.length-1,result=-1;while(low<=high){const mid=(low+high)>>1;if(transcriptSegments[mid].start<=currentTime){result=mid;low=mid+1}else high=mid-1}return result};
+    video.addEventListener("timeupdate",()=>{const index=findActiveSegment(video.currentTime);if(index!==activeSegment)setActiveSegment(index,true)});
+    searchInput.addEventListener("input",renderTranscript);clearSearch.addEventListener("click",()=>{searchInput.value="";searchInput.focus();renderTranscript()});
     if(!/^v_[A-Za-z0-9]+$/.test(rid)||!/^[a-f0-9]{64}$/.test(token)){
       status.querySelector(".pulse").style.display="none";message.textContent="播放链接不完整，请从课程表重新打开。";
+      transcriptCount.textContent="不可用";emptyTranscript("无法读取逐字稿","请从课程表中的“云端播放”重新打开。");
     }else{
       resource.textContent=rid.slice(0,8)+"…"+rid.slice(-6);
       const signUrl=new URL("/sign",signerBaseUrl);signUrl.searchParams.set("rid",rid);signUrl.searchParams.set("token",token);
+      const transcriptUrl=new URL("/transcript",signerBaseUrl);transcriptUrl.searchParams.set("rid",rid);transcriptUrl.searchParams.set("token",token);
       fetch(signUrl,{cache:"no-store",referrerPolicy:"no-referrer"}).then(async response=>{
         const body=await response.json();if(!response.ok||!body.ok||!body.url)throw new Error("signing_failed");
         size.textContent=formatSize(body.size_bytes);video.src=body.url;video.style.display="block";status.style.display="none";
       }).catch(()=>{status.querySelector(".pulse").style.display="none";message.textContent="暂时无法取得播放地址，请稍后从课程表重试。";});
+      fetch(transcriptUrl,{cache:"no-store",referrerPolicy:"no-referrer"}).then(async response=>{if(response.status===404)return null;const body=await response.json();if(!response.ok)throw new Error("transcript_failed");return body}).then(body=>{if(!body){transcriptCount.textContent="待生成";emptyTranscript("逐字稿尚未生成","视频仍可正常播放；转写完成后这里会自动出现时间片段。");return}if(!rawTitle&&body.title)setTitle(body.title);transcriptSegments=normalizeSegments(body);renderTranscript()}).catch(()=>{transcriptCount.textContent="读取失败";emptyTranscript("暂时无法读取逐字稿","请稍后刷新页面重试。")});
     }
   </script>
 </body>
