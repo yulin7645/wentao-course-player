@@ -35,7 +35,7 @@
   </main>
   <script>
     const signerBaseUrl="https://xiaoe-player-live-replay-bnhcnqojqg.cn-hangzhou.fcapp.run";
-    const params=new URLSearchParams(location.search);
+    const params=new URLSearchParams(location.hash.slice(1)||location.search);
     const rid=params.get("rid")||"",token=params.get("token")||"";
     const video=document.getElementById("video"),status=document.getElementById("status"),message=document.getElementById("message");
     const resource=document.getElementById("resource"),size=document.getElementById("size");
